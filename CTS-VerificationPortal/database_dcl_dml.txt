@@ -1,0 +1,58 @@
+
+
+// To create database
+
+CREATE database CTS_verification;
+
+
+// To create user_info table
+
+CREATE TABLE `CTS_verification`.`user_info` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `user_name` VARCHAR(45) NOT NULL,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `user_first_name` VARCHAR(45) NOT NULL,
+  `user_last_name` VARCHAR(45) NOT NULL,
+  `user_email` VARCHAR(45) NULL,
+  `user_phone` VARCHAR(45) NULL,
+  PRIMARY KEY (`user_id`));
+
+// To insert a record
+
+INSERT INTO user_info (user_name, password_hash, user_first_name, user_last_name, user_email, user_phone)
+VALUES ("tempUser", "asdasd", "temp", "User", "", "");
+
+
+// To create vehicle_info table
+
+CREATE TABLE `CTS_verification`.`vehicle_info` (
+  `unique_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `vehicle_VIN` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`unique_id`),
+  INDEX `user_id_idx` (`user_id` ASC),
+  CONSTRAINT `user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `CTS_verification`.`user_info` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+// To create Vehicle requests table
+
+CREATE TABLE `CTS_verification`.`vehicle_requests` (
+  `unique_id` INT NOT NULL AUTO_INCREMENT,
+  `application_id` VARCHAR(45) NOT NULL,
+  `fk_user_id` INT NOT NULL,
+  `applicant_name` VARCHAR(45) NOT NULL,
+  `applicant_proof` VARCHAR(45) NULL,
+  `application_result` VARCHAR(45) NULL,
+  `applicant_vehicle_VIN` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`unique_id`),
+  UNIQUE INDEX `application_id_UNIQUE` (`application_id` ASC),
+  INDEX `fk_user_id_idx` (`fk_user_id` ASC),
+  CONSTRAINT `fk_user_id`
+    FOREIGN KEY (`fk_user_id`)
+    REFERENCES `CTS_verification`.`user_info` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
